@@ -1,0 +1,20 @@
+%Write a MATLAB program to generate a sinusoidal sequence x[n] = A * cos(omega_{2}*n + varphi) από plot the sequence using the 'stem' function. The input data the desired length L. 
+%amplitude A_{n} the angular frequency and the phase o where 0 < omega_{2} < and 0 < varphi < 2pi with a sampling rate of 20 KHz.
+
+clc; clear; close all;
+
+% User inputs
+L = input('Enter desired length L ( msec ): ');
+A = input('Enter amplitude A: ');
+w = input('Enter angular frequency w (rad/sample): ');
+phi = input('Enter phase phi (0 < phi < 2*pi): ');
+
+fs = 20 % Sampling Freq in Khz
+n = 0:L-1;  
+x = A * cos(w*n/fs + phi);
+
+stem(n, x, 'filled');
+xlabel('n');
+ylabel('x[n]');
+title('Sinusoidal Sequence');
+grid on;
