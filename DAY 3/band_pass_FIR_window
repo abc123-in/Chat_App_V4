@@ -1,0 +1,47 @@
+%Design 21-length and 41-length band-pass FIR filter with lower and upper cutoff frequency at 
+% 2.5 KHz and 3 KHz respectively using the following window functions.
+%  Assume the sampling frequency is 8 KHz.
+
+clc; clear; close all;
+
+Fs = 8000;
+f1 = 2500; f2 = 3000;
+Wn = [f1 f2]/(Fs/2);
+
+N_values = [21, 41];
+
+for k = 1:length(N_values)
+    N = N_values(k);
+    
+    w_rect = rectwin(N);
+    w_hamm = hamming(N);
+    w_hann = hann(N);
+    w_black = blackman(N);
+    
+    h1 = fir1(N-1, Wn, 'bandpass', w_rect);
+    h2 = fir1(N-1, Wn, 'bandpass', w_hamm);
+    h3 = fir1(N-1, Wn, 'bandpass', w_hann);
+    h4 = fir1(N-1, Wn, 'bandpass', w_black);
+    
+    filters = {h1, h2, h3, h4};
+    names = {'Rectangular','Hamming','Hanning','Blackman'};
+    
+    for i = 1:4
+        [H, w] = freqz(filters{i},1,512,Fs);
+        
+        figure;
+        subplot(2,1,1);
+        plot(w, abs(H));
+        xlabel('Frequency (Hz)');
+        ylabel('|H(f)|');
+        title([names{i}, ' BPF (N=', num2str(N), ')']);
+        grid on;
+        
+        subplot(2,1,2);
+        plot(w, angle(H));
+        xlabel('Frequency (Hz)');
+        ylabel('Phase (rad)');
+        title('Phase Response');
+        grid on;
+    end
+end
