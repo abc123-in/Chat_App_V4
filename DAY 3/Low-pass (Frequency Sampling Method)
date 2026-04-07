@@ -1,0 +1,47 @@
+%Use the frequency sampling method to design a linear phase low-pass FIR filter of length 21 and 41 respectively. 
+% Let the cutoff frequency be 2 KHz and assume a sampling frequency of 8KHz. 
+% List FIR filter coefficients and plot the frequency responses
+
+clc; clear; close all;
+
+Fs = 8000;
+fc = 2000;
+
+N_values = [21, 41];
+
+for k = 1:length(N_values)
+    N = N_values(k);
+    
+    Hk = zeros(1,N);
+    
+    for i = 1:N
+        f = (i-1)*Fs/N;
+        if f <= fc
+            Hk(i) = 1;
+        else
+            Hk(i) = 0;
+        end
+    end
+    
+    h = real(ifft(Hk));
+    
+    disp(['Coefficients for N = ', num2str(N)]);
+    disp(h);
+    
+    [H, w] = freqz(h,1,512,Fs);
+    
+    figure;
+    subplot(2,1,1);
+    plot(w, abs(H));
+    xlabel('Frequency (Hz)');
+    ylabel('|H(f)|');
+    title(['Freq Sampling LPF (N=', num2str(N), ')']);
+    grid on;
+    
+    subplot(2,1,2);
+    plot(w, angle(H));
+    xlabel('Frequency (Hz)');
+    ylabel('Phase');
+    title('Phase Response');
+    grid on;
+end
