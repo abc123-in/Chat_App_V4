@@ -14,7 +14,7 @@ n = 0:L-1;
 x = A * cos(w*n/fs + phi);
 
 stem(n, x, 'filled');
-xlabel('n');
-ylabel('x[n]');
+xlabel('n - Discrete Time Samples');
+ylabel('x[n] - Amplitude');
 title('Sinusoidal Sequence');
 grid on;
