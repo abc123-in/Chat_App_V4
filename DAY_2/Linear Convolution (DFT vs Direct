@@ -1,0 +1,27 @@
+%Write a program to implement linear convolution via DFT-based approach, 
+% and compare your results using direct linear convolution
+
+clc; clear; close all;
+
+x = [1 2 3 4 2 4 5 6 4 3 1 5 8 6];
+h = [1 1 1 2 4 3 4 1 6];
+
+% Direct convolution
+y_direct = conv(x, h);
+
+% DFT-based convolution
+N = length(x) + length(h) - 1;
+X = fft(x, N);
+H = fft(h, N);
+y_dft = ifft(X .* H);
+
+n = 0:N-1;
+
+figure;
+stem(n, y_direct, 'filled'); hold on;
+stem(n, real(y_dft), 'r--');
+legend('Direct','DFT-based');
+xlabel('n');
+ylabel('Amplitude');
+title('Linear Convolution Comparison');
+grid on;
