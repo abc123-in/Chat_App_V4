@@ -1,0 +1,32 @@
+%Evaluate and plot the spectrum of your own voice signal.
+
+clc; clear; close all;
+
+Fs = 8000;
+recObj = audiorecorder(Fs, 16, 1);
+
+disp('Start speaking...');
+recordblocking(recObj, 3);
+disp('Recording finished.');
+
+x = getaudiodata(recObj);
+
+N = length(x);
+X = fft(x);
+f = (0:N-1)*(Fs/N);
+
+figure;
+subplot(2,1,1);
+plot(f, x);
+xlabel('Frequency (Hz)');
+ylabel('|X(f)|');
+title('Spectrum of Voice Signal');
+grid on;
+
+% Magnitude Spectrum
+subplot(2,1,2);
+plot(f, abs(X)/N);
+xlabel('Frequency (Hz)');
+ylabel('|X(f)|');
+title('Magnitude Spectrum of Voice Signal');
+grid on;
