@@ -1,0 +1,38 @@
+%Compute an N-point DFT of the following sequences and plot
+%x[n]= Aforn = 0 ,1,2,...,M-1\\ 0&otherwise
+%where M = 10 and (i) N = 10(ii) * N = 100(iii) * N = 256 Plot the magnitude spectrum of DTFT of x[n] and compare the plots for different lengths.
+
+clc; clear; close all;
+
+A = 1; 
+M = 10;
+x = A * ones(1, M);
+
+N_values = [10, 100, 256];
+
+for k = 1:length(N_values)
+    N = N_values(k);
+    
+    x_padded = [x zeros(1, N-M)];
+    X = fft(x_padded, N);
+    
+    f = (0:N-1)/N;
+    
+    figure;
+    
+    % Magnitude
+    subplot(2,1,1);
+    stem(f, abs(X), 'filled');
+    xlabel('Normalized Frequency');
+    ylabel('|X(k)|');
+    title(['Magnitude Spectrum (N = ', num2str(N), ')']);
+    grid on;
+    
+    %  Phase
+    subplot(2,1,2);
+    stem(f, angle(X), 'filled');
+    xlabel('Normalized Frequency');
+    ylabel('Phase (radians)');
+    title('Phase Spectrum');
+    grid on;
+end
