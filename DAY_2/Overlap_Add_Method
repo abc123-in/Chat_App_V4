@@ -1,0 +1,39 @@
+%Write a program to realize linear convolution between a small and 
+% a long discrete-time sequence using overlap-add method. (Do not use 'fftfilter' function of MATLAB)
+
+clc; clear; close all;
+
+x = [1 2 3 4 5 6 7 8];   % long sequence
+h = [1 1 1];             % small sequence
+
+L = 4; % block length
+M = length(h);
+
+N = L + M - 1;
+
+h_fft = fft(h, N);
+
+y = zeros(1, length(x) + M - 1);
+
+idx = 1;
+
+while idx <= length(x)
+    x_block = x(idx:min(idx+L-1, length(x)));
+    x_block = [x_block zeros(1, N - length(x_block))];
+    
+    X_block = fft(x_block);
+    Y_block = ifft(X_block .* h_fft);
+    
+    y(idx:idx+N-1) = y(idx:idx+N-1) + real(Y_block);
+    
+    idx = idx + L;
+end
+
+n = 0:length(y)-1;
+
+figure;
+stem(n, y, 'filled');
+xlabel('n');
+ylabel('Amplitude');
+title('Linear Convolution using Overlap-Add');
+grid on;
