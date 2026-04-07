@@ -1,0 +1,36 @@
+%A discrete-time system is represented by the following input output relation: y[n) = 1/M * sum k = 0 to M - 1 x * [n - k]
+%This is an example of M-point a system is often used in smoothing random variations in data. Consider for example a signal corupted by a 
+%noise whose minimum and maximum values are -0.5 and 0.5 respectively, Le. x\{n\} = c[n] + d[n] Original uncorrupted signal is given x[n] = 2[n * (0.9) ^ n]
+
+
+clc; clear; close all;
+
+n = 0:100;
+
+% Original signal
+s = 2*n.*(0.9).^n;
+
+% Noise
+d = -0.5 + rand(size(n));  
+
+% Noisy signal
+x = s + d;
+
+M_values = [5 7 9];
+
+figure;
+
+for i = 1:length(M_values)
+    M = M_values(i);
+    
+    h = ones(1, M)/M; % Moving average filter
+    y = conv(x, h, 'same');
+    
+    subplot(3,1,i);
+    plot(n, x, 'r', n, y, 'y', n, s, 'b','LineWidth',0.8);
+    xlabel('n - Discrete Time Samples');
+    ylabel('x[n] - Amplitude');
+    legend('Noisy','Filtered','Original');
+    title(['Average filter of length is ', num2str(M)]);
+    grid on;
+end
