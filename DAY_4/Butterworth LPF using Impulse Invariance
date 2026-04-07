@@ -1,0 +1,32 @@
+%Write a MATLAB program to design a digital Butterworth low-pass filter using impulse invariance method. Determine the order of the analog prototype 
+% filter for this purpose. The input data required for your program are sampling frequency (F_{s}) pass-band edge frequency (F_{p}) stop-band edge frequency 
+% (F_{s}) maximum pass-band ripple ( hat o_{p} ) and minimum stop-attenuation (delta_{z}) Plot the gain response of the designed filter for the flowing 
+% inputs: F_{s} = 80KHz F, 4KHz, F bullet = 20KHz . delta_{p} = 0.5 * dB delta_{s} = 45 * dB You may use the M-file impinvar of MATLAB.
+
+clc;
+clear;
+close all;
+
+Fs = 80000;      % Sampling frequency
+Fp = 4000;       % Passband frequency
+Fst = 20000;     % Stopband frequency
+
+Rp = 0.5;        % Passband ripple
+Rs = 45;         % Stopband attenuation
+
+Wp = 2*pi*Fp;    % Analog passband
+Ws = 2*pi*Fst;   % Analog stopband
+
+% Find filter order
+[N,Wn] = buttord(Wp,Ws,Rp,Rs,'s');
+
+% Analog Butterworth filter
+[b,a] = butter(N,Wn,'s');
+
+% Convert to digital using impulse invariance
+[num,den] = impinvar(b,a,Fs);
+
+% Frequency response
+figure;
+freqz(num,den);
+title('Butterworth LPF using Impulse Invariance');
