@@ -1,0 +1,40 @@
+%Write a program to plot the magnitude and phase response of discrete-time system characterized by its impulse response:
+%for n = 0 otherwise h[n] = 0.5\\ sin0.5 pi n\\ pi n
+%(1) n = - 8/7
+%(ii) n = - 16/15
+%(iii) n = - 64/63
+
+clc; clear; close all;
+
+ranges = { -8:7, -16:15, -64:63 };
+
+for r = 1:length(ranges)
+    n = ranges{r};
+    
+    h = zeros(size(n));
+    for i = 1:length(n)
+        if n(i) == 0
+            h(i) = 0.5;
+        else
+            h(i) = sin(0.5*pi*n(i)) / (pi*n(i));
+        end
+    end
+    
+    H = fftshift(fft(h, 512));
+    w = linspace(-pi, pi, 512);
+    
+    figure;
+    subplot(2,1,1);
+    plot(w, abs(H));
+    xlabel('\omega');
+    ylabel('|H(e^{j\omega})|');
+    title(['Magnitude Response (n range = ', num2str(n(1)), ' to ', num2str(n(end)), ')']);
+    grid on;
+    
+    subplot(2,1,2);
+    plot(w, angle(H));
+    xlabel('\omega');
+    ylabel('Phase (radians)');
+    title('Phase Response');
+    grid on;
+end
