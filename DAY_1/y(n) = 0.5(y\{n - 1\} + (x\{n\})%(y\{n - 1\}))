@@ -1,0 +1,28 @@
+%Write a MATLAB program implementing the discrete-time system given by following input output relation.
+%y(n) = 0.5(y\{n - 1\} + (x\{n\})/(y\{n - 1\}))
+%Show that the output y[n] of x\ n\ =ap\ n\ with p\{- 1\} = 1 ; converges to sqrt(alpha) n -> ∞ where, a is a positive number.
+
+clc; clear; close all;
+
+N = 10;
+n = 0:N;
+
+a = 9;
+x = a * ones(1,N+1);
+
+y = zeros(1,N+1);
+
+y_prev = 1; % represents y[-1]
+
+for i = 1:length(n)
+    y(i) = 0.5*(y_prev + x(i)/y_prev);
+    y_prev = y(i);
+end
+
+stem(n, y, 'filled');
+xlabel('n - Discrete Time Samples');
+ylabel('y[n] - Amplitude');
+title('System Output (Stem Plot)');
+grid on;
+
+disp(['Final value ~ ', num2str(y(end)),' (Expected sqrt(a) = ', num2str(sqrt(a)), ')']);
